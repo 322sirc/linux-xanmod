@@ -71,7 +71,7 @@ fi
 
 pkgbase=linux-xanmod-edge
 _major=5.18
-pkgver=${_major}.11
+pkgver=${_major}.13
 _branch=5.x
 xanmod=1
 pkgrel=${xanmod}
@@ -91,8 +91,8 @@ _srcname="linux-${pkgver}-xanmod${xanmod}"
 
 source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
         "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
-        choose-gcc-optimization.sh)
-        #"patch-${pkgver}-xanmod${xanmod}.xz::https://sourceforge.net/projects/xanmod/files/releases/stable/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz/download"
+        choose-gcc-optimization.sh
+        bottomspeakers-for-14iap7-kernel-518.patch)
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -106,10 +106,11 @@ for _patch in ${_patches[@]}; do
     source+=("${_patch}::https://raw.githubusercontent.com/archlinux/svntogit-packages/${_commit}/trunk/${_patch}")
 done
 
-sha256sums=('51f3f1684a896e797182a0907299cc1f0ff5e5b51dd9a55478ae63a409855cee'
+sha256sums=('SKIP'
             'SKIP'
-            '15741e8f803af25f4582d01e7c08a52a4f16ad28257f507ed5008f34d5c78298'
-            'dda2e928f3b02c28e71d4e99f90b499b4c99a265d30fceec7dc1dd7082afc285')
+            'SKIP'
+            'SKIP'
+            'SKIP')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
