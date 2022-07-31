@@ -20,7 +20,7 @@ fi
 ## Set variable "use_numa" to: n to disable (possibly increase performance)
 ##                             y to enable  (stock default)
 if [ -z ${use_numa+x} ]; then
-  use_numa=y
+  use_numa=n
 fi
 
 ## For performance you can disable FUNCTION_TRACER/GRAPH_TRACER. Limits debugging and analyzing of the kernel.
@@ -92,7 +92,13 @@ _srcname="linux-${pkgver}-xanmod${xanmod}"
 source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
         "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
          choose-gcc-optimization.sh
-         bottomspeakers-16IAP7.patch)
+        '0001-ALSA-hda-realtek-Add-quirk-for-Lenovo-Yoga9-14IAP7.patch'
+        '0002-ACPICA-Make-address-space-handler-install-and-_REG-e.patch'
+        '0003-ACPI-EC-fix-ECDT-probe-ordering-issues.patch'
+        '0004-Add-IdeaPad-WMI-Fn-Keys-driver.patch'
+        '0005-Add-IdeaPad-Usage-Mode-driver.patch'
+        '0006-Add-IdeaPad-quick_charge-attribute-to-sysfs.patch'
+        '0007-ALSA-hda-realtek-Add-quirk-for-Yoga-devices.patch')     
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -107,6 +113,12 @@ for _patch in ${_patches[@]}; do
 done
 
 sha256sums=('SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
