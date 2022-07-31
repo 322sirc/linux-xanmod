@@ -71,7 +71,7 @@ fi
 
 pkgbase=linux-xanmod-edge
 _major=5.18
-pkgver=${_major}.14
+pkgver=${_major}.15
 _branch=5.x
 xanmod=1
 pkgrel=${xanmod}
@@ -82,6 +82,8 @@ arch=(x86_64)
 license=(GPL2)
 makedepends=(
   bc cpio kmod libelf perl tar xz
+  xmlto python-sphinx python-sphinx_rtd_theme graphviz imagemagick texlive-latexextra
+  git
 )
 if [ "${_compiler}" = "clang" ]; then
   makedepends+=(clang llvm lld python)
@@ -112,17 +114,17 @@ for _patch in ${_patches[@]}; do
     source+=("${_patch}::https://raw.githubusercontent.com/archlinux/svntogit-packages/${_commit}/trunk/${_patch}")
 done
 
-sha256sums=('SKIP'
+sha256sums=('51f3f1684a896e797182a0907299cc1f0ff5e5b51dd9a55478ae63a409855cee'
             'SKIP'
-            'SKIP'
-            'SKIP'
-            'SKIP'
-            'SKIP'
-            'SKIP'
-            'SKIP'
-            'SKIP'
-            'SKIP'
-            'SKIP')
+            'ca1e39283513bfce56a40dd2d0a95b0616b4c3eed93ed21c654fda5103d20919'
+            'dda2e928f3b02c28e71d4e99f90b499b4c99a265d30fceec7dc1dd7082afc285'
+	    'SKIP'
+	    'SKIP'
+	    'SKIP'
+	    'SKIP'
+	    'SKIP'
+	    'SKIP'
+	    'SKIP')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
