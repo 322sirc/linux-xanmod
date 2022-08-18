@@ -42,12 +42,12 @@ fi
 # This will be overwritten by selecting any option in microarchitecture script
 # Source files: https://github.com/xanmod/linux/tree/5.17/CONFIGS/xanmod/gcc
 if [ -z ${_config+x} ]; then
-  _config=config_x86-64-v2
+  _config=config_x86-64-v3
 fi
 
 # Compress modules with ZSTD (to save disk space)
 if [ -z ${_compress_modules+x} ]; then
-  _compress_modules=y
+  _compress_modules=n
 fi
 
 # Compile ONLY used modules to VASTLY reduce the number of modules built
@@ -70,8 +70,8 @@ fi
 ### IMPORTANT: Do no edit below this line unless you know what you're doing
 
 pkgbase=linux-xanmod-edge
-_major=5.18
-pkgver=${_major}.15
+_major=5.19
+pkgver=${_major}.2
 _branch=5.x
 xanmod=1
 pkgrel=${xanmod}
@@ -82,8 +82,6 @@ arch=(x86_64)
 license=(GPL2)
 makedepends=(
   bc cpio kmod libelf perl tar xz
-  xmlto python-sphinx python-sphinx_rtd_theme graphviz imagemagick texlive-latexextra
-  git
 )
 if [ "${_compiler}" = "clang" ]; then
   makedepends+=(clang llvm lld python)
@@ -94,7 +92,7 @@ _srcname="linux-${pkgver}-xanmod${xanmod}"
 source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
         "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
          choose-gcc-optimization.sh
-        '0001-ALSA-hda-realtek-Add-quirk-for-Lenovo-Yoga9-14IAP7.patch'
+        '0001-PCI-DPC-Quirk-poot-port-PIO-log-size-for-certain-Int.patch'
         '0002-ACPICA-Make-address-space-handler-install-and-_REG-e.patch'
         '0003-ACPI-EC-fix-ECDT-probe-ordering-issues.patch'
         '0004-Add-IdeaPad-WMI-Fn-Keys-driver.patch'
@@ -114,17 +112,17 @@ for _patch in ${_patches[@]}; do
     source+=("${_patch}::https://raw.githubusercontent.com/archlinux/svntogit-packages/${_commit}/trunk/${_patch}")
 done
 
-sha256sums=('51f3f1684a896e797182a0907299cc1f0ff5e5b51dd9a55478ae63a409855cee'
+sha256sums=('ff240c579b9ee1affc318917de07394fc1c3bb49dac25ec1287370c2e15005a8'
             'SKIP'
-            'ca1e39283513bfce56a40dd2d0a95b0616b4c3eed93ed21c654fda5103d20919'
+            '8167f1e2fc053c313af0cd145a13c8cfd89121ef7c27d4609899371eb0368edf'
             'dda2e928f3b02c28e71d4e99f90b499b4c99a265d30fceec7dc1dd7082afc285'
-	    'SKIP'
-	    'SKIP'
-	    'SKIP'
-	    'SKIP'
-	    'SKIP'
-	    'SKIP'
-	    'SKIP')
+            'b19a23d37f3c74aa928c5d577f4fb41f115dbe1acdc3f6383ac9a53c15dbcf71'
+            '06cad2a429f2a694f55300a5153483f9883ae5cfb8f8223ed2821a944e6ea4a4'
+            '43e0a20d037015742373f19def6f31710dd35a8ee0e121a97c29b2a57080b801'
+            'c6f778d786fbdd3483c66d834321c788b2818828003862d5a2a12f4cbc1694e6'
+            'c9420129ecdbdfaf3b2006923763d1291f9031f26911219910593b33b621e18d'
+            'c5ade2a167b1337e5564e49f9bec135d40b30b2442174598c354d80580a0af4e'
+            '4ccf87491541cd991fbb2cf05f87fd08ddb885144f7c3bc04fe16e406327b136')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
