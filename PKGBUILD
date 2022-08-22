@@ -71,7 +71,7 @@ fi
 
 pkgbase=linux-xanmod-edge
 _major=5.19
-pkgver=${_major}.2
+pkgver=${_major}.3
 _branch=5.x
 xanmod=1
 pkgrel=${xanmod}
@@ -98,7 +98,9 @@ source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar
         '0004-Add-IdeaPad-WMI-Fn-Keys-driver.patch'
         '0005-Add-IdeaPad-Usage-Mode-driver.patch'
         '0006-Add-IdeaPad-quick_charge-attribute-to-sysfs.patch'
-        '0007-ALSA-hda-realtek-Add-quirk-for-Yoga-devices.patch')     
+        '0007-ALSA-hda-realtek-Add-quirk-for-Yoga-devices.patch'
+        '0008-HID-hid-sensor-custom-More-custom-iio-sensors.patch'
+        '0009-IIO-hid-sensor-als-Use-generic-usage.patch')     
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -114,7 +116,7 @@ done
 
 sha256sums=('ff240c579b9ee1affc318917de07394fc1c3bb49dac25ec1287370c2e15005a8'
             'SKIP'
-            '8167f1e2fc053c313af0cd145a13c8cfd89121ef7c27d4609899371eb0368edf'
+            'ea0f5d34451a0f9278402438a51c4756c75b26c42da4a1d42e99b3f4177400a6'
             'dda2e928f3b02c28e71d4e99f90b499b4c99a265d30fceec7dc1dd7082afc285'
             'b19a23d37f3c74aa928c5d577f4fb41f115dbe1acdc3f6383ac9a53c15dbcf71'
             '06cad2a429f2a694f55300a5153483f9883ae5cfb8f8223ed2821a944e6ea4a4'
@@ -122,7 +124,9 @@ sha256sums=('ff240c579b9ee1affc318917de07394fc1c3bb49dac25ec1287370c2e15005a8'
             'c6f778d786fbdd3483c66d834321c788b2818828003862d5a2a12f4cbc1694e6'
             'c9420129ecdbdfaf3b2006923763d1291f9031f26911219910593b33b621e18d'
             'c5ade2a167b1337e5564e49f9bec135d40b30b2442174598c354d80580a0af4e'
-            '4ccf87491541cd991fbb2cf05f87fd08ddb885144f7c3bc04fe16e406327b136')
+            '4ccf87491541cd991fbb2cf05f87fd08ddb885144f7c3bc04fe16e406327b136'
+            'd1b2c9c17b0c193d3df1184d0f7fc850daf9e3d84d1d34385c8a9ee10a6ae17c'
+            '7ff6d9c2da686f3331c117d2f06f6aa9f37be5ac95eb781b54491e0ece517a8a')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
