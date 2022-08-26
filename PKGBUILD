@@ -71,7 +71,7 @@ fi
 
 pkgbase=linux-xanmod-edge
 _major=5.19
-pkgver=${_major}.3
+pkgver=${_major}.4
 _branch=5.x
 xanmod=1
 pkgrel=${xanmod}
@@ -116,7 +116,7 @@ done
 
 sha256sums=('ff240c579b9ee1affc318917de07394fc1c3bb49dac25ec1287370c2e15005a8'
             'SKIP'
-            'ea0f5d34451a0f9278402438a51c4756c75b26c42da4a1d42e99b3f4177400a6'
+            '9be3546f3c4828e080152b9e414a9baaa07fb3dd1a3750ecebfc22901b762271'
             'dda2e928f3b02c28e71d4e99f90b499b4c99a265d30fceec7dc1dd7082afc285'
             'b19a23d37f3c74aa928c5d577f4fb41f115dbe1acdc3f6383ac9a53c15dbcf71'
             '06cad2a429f2a694f55300a5153483f9883ae5cfb8f8223ed2821a944e6ea4a4'
