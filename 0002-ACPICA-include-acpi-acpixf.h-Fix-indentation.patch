@@ -1,0 +1,169 @@
+From f19023b1287bf8bddbd2113e6f3b08b1abc5104a Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 3 Oct 2022 16:15:03 +0200
+Subject: [PATCH 1/4] ACPICA: include/acpi/acpixf.h: Fix indentation
+
+A bunch of the functions declared in include/acpi/acpixf.h have their
+name aligned a space after the '(' of e.g. the
+`ACPI_EXTERNAL_RETURN_STATUS(acpi_status` line above rather then being
+directly aligned after the '('.
+
+This breaks applying patches generated from the ACPICA upstream git,
+remove the extra space before the function-names and all the arguments
+to fix this.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ include/acpi/acpixf.h | 120 +++++++++++++++++++++---------------------
+ 1 file changed, 60 insertions(+), 60 deletions(-)
+
+diff --git a/include/acpi/acpixf.h b/include/acpi/acpixf.h
+index 67c0b9e734b6..3fde274c465b 100644
+--- a/include/acpi/acpixf.h
++++ b/include/acpi/acpixf.h
+@@ -589,82 +589,82 @@ ACPI_EXTERNAL_RETURN_STATUS(acpi_status
+ 			    acpi_install_initialization_handler
+ 			    (acpi_init_handler handler, u32 function))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status
+-				 acpi_install_sci_handler(acpi_sci_handler
+-							  address,
+-							  void *context))
+-ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status
+-				 acpi_remove_sci_handler(acpi_sci_handler
+-							 address))
++				acpi_install_sci_handler(acpi_sci_handler
++							 address,
++							 void *context))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status
+-				 acpi_install_global_event_handler
+-				 (acpi_gbl_event_handler handler,
+-				  void *context))
++				acpi_remove_sci_handler(acpi_sci_handler
++							address))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status
+-				 acpi_install_fixed_event_handler(u32
+-								  acpi_event,
+-								  acpi_event_handler
+-								  handler,
+-								  void
+-								  *context))
++				acpi_install_global_event_handler
++				(acpi_gbl_event_handler handler,
++				 void *context))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status
+-				 acpi_remove_fixed_event_handler(u32 acpi_event,
++				acpi_install_fixed_event_handler(u32
++								 acpi_event,
+ 								 acpi_event_handler
+-								 handler))
+-ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status
+-				 acpi_install_gpe_handler(acpi_handle
+-							  gpe_device,
+-							  u32 gpe_number,
+-							  u32 type,
+-							  acpi_gpe_handler
+-							  address,
+-							  void *context))
++								 handler,
++								 void
++								 *context))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status
+-				 acpi_install_gpe_raw_handler(acpi_handle
+-							      gpe_device,
+-							      u32 gpe_number,
+-							      u32 type,
+-							      acpi_gpe_handler
+-							      address,
+-							      void *context))
++				acpi_remove_fixed_event_handler(u32 acpi_event,
++								acpi_event_handler
++								handler))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status
+-				 acpi_remove_gpe_handler(acpi_handle gpe_device,
++				acpi_install_gpe_handler(acpi_handle
++							 gpe_device,
+ 							 u32 gpe_number,
++							 u32 type,
+ 							 acpi_gpe_handler
+-							 address))
+-ACPI_EXTERNAL_RETURN_STATUS(acpi_status
+-			     acpi_install_notify_handler(acpi_handle device,
+-							 u32 handler_type,
+-							 acpi_notify_handler
+-							 handler,
++							 address,
+ 							 void *context))
++ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status
++				acpi_install_gpe_raw_handler(acpi_handle
++							     gpe_device,
++							     u32 gpe_number,
++							     u32 type,
++							     acpi_gpe_handler
++							     address,
++							     void *context))
++ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status
++				acpi_remove_gpe_handler(acpi_handle gpe_device,
++							u32 gpe_number,
++							acpi_gpe_handler
++							address))
+ ACPI_EXTERNAL_RETURN_STATUS(acpi_status
+-			     acpi_remove_notify_handler(acpi_handle device,
++			    acpi_install_notify_handler(acpi_handle device,
+ 							u32 handler_type,
+ 							acpi_notify_handler
+-							handler))
+-ACPI_EXTERNAL_RETURN_STATUS(acpi_status
+-			     acpi_install_address_space_handler(acpi_handle
+-								device,
+-								acpi_adr_space_type
+-								space_id,
+-								acpi_adr_space_handler
+-								handler,
+-								acpi_adr_space_setup
+-								setup,
+-								void *context))
+-ACPI_EXTERNAL_RETURN_STATUS(acpi_status
+-			     acpi_remove_address_space_handler(acpi_handle
++							handler,
++							void *context))
++ACPI_EXTERNAL_RETURN_STATUS(acpi_status
++			    acpi_remove_notify_handler(acpi_handle device,
++						       u32 handler_type,
++						       acpi_notify_handler
++						       handler))
++ACPI_EXTERNAL_RETURN_STATUS(acpi_status
++			    acpi_install_address_space_handler(acpi_handle
+ 							       device,
+ 							       acpi_adr_space_type
+ 							       space_id,
+ 							       acpi_adr_space_handler
+-							       handler))
+-ACPI_EXTERNAL_RETURN_STATUS(acpi_status
+-			     acpi_install_exception_handler
+-			     (acpi_exception_handler handler))
+-ACPI_EXTERNAL_RETURN_STATUS(acpi_status
+-			     acpi_install_interface_handler
+-			     (acpi_interface_handler handler))
++							       handler,
++							       acpi_adr_space_setup
++							       setup,
++							       void *context))
++ACPI_EXTERNAL_RETURN_STATUS(acpi_status
++			    acpi_remove_address_space_handler(acpi_handle
++							      device,
++							      acpi_adr_space_type
++							      space_id,
++							      acpi_adr_space_handler
++							      handler))
++ACPI_EXTERNAL_RETURN_STATUS(acpi_status
++			    acpi_install_exception_handler
++			    (acpi_exception_handler handler))
++ACPI_EXTERNAL_RETURN_STATUS(acpi_status
++			    acpi_install_interface_handler
++			    (acpi_interface_handler handler))
+ 
+ /*
+  * Global Lock interfaces
+-- 
+2.37.3
+

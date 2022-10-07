@@ -28,7 +28,7 @@ fi
 ## Set variable "use_tracers" to: n to disable (possibly increase performance)
 ##                                y to enable  (stock default)
 if [ -z ${use_tracers+x} ]; then
-  use_tracers=n
+  use_tracers=y
 fi
 
 ## NOTICE: clang config is not ready yet in 5.17.x
@@ -70,9 +70,9 @@ fi
 ### IMPORTANT: Do no edit below this line unless you know what you're doing
 
 pkgbase=linux-xanmod-edge
-_major=5.19
-pkgver=${_major}.4
-_branch=5.x
+_major=6.0
+pkgver=${_major}.0
+_branch=6.x
 xanmod=1
 pkgrel=${xanmod}
 pkgdesc='Linux Xanmod - Latest Mainline (EDGE)'
@@ -93,14 +93,16 @@ source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar
         "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
          choose-gcc-optimization.sh
         '0001-PCI-DPC-Quirk-poot-port-PIO-log-size-for-certain-Int.patch'
-        '0002-ACPICA-Make-address-space-handler-install-and-_REG-e.patch'
-        '0003-ACPI-EC-fix-ECDT-probe-ordering-issues.patch'
-        '0004-Add-IdeaPad-WMI-Fn-Keys-driver.patch'
-        '0005-Add-IdeaPad-Usage-Mode-driver.patch'
-        '0006-Add-IdeaPad-quick_charge-attribute-to-sysfs.patch'
-        '0007-ALSA-hda-realtek-Add-quirk-for-Yoga-devices.patch'
-        '0008-HID-hid-sensor-custom-More-custom-iio-sensors.patch'
-        '0009-IIO-hid-sensor-als-Use-generic-usage.patch')     
+        '0002-ACPICA-include-acpi-acpixf.h-Fix-indentation.patch'
+        '0003-ACPICA-Allow-address_space_handler-Install-and-_REG-.patch'
+        '0004-ACPI-EC-Fix-EC-address-space-handler-unregistration.patch'
+        '0005-ACPI-EC-fix-ECDT-probe-ordering-issues.patch'
+        '0006-Add-IdeaPad-WMI-Fn-Keys-driver.patch'
+        '0007-Add-IdeaPad-Usage-Mode-driver.patch'
+        '0008-Add-IdeaPad-quick_charge-attribute-to-sysfs.patch'        
+        '0009-ALSA-hda-realtek-Add-quirk-for-Yoga-devices.patch'
+        '0010-HID-hid-sensor-custom-More-custom-iio-sensors.patch'
+        '0011-IIO-hid-sensor-als-Use-generic-usage.patch')     
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -114,13 +116,15 @@ for _patch in ${_patches[@]}; do
     source+=("${_patch}::https://raw.githubusercontent.com/archlinux/svntogit-packages/${_commit}/trunk/${_patch}")
 done
 
-sha256sums=('ff240c579b9ee1affc318917de07394fc1c3bb49dac25ec1287370c2e15005a8'
+sha256sums=('5c2443a5538de52688efb55c27ab0539c1f5eb58c0cfd16a2b9fbb08fd81788e'
             'SKIP'
-            '9be3546f3c4828e080152b9e414a9baaa07fb3dd1a3750ecebfc22901b762271'
+            'c4c9ceae47e1809d2e32ef5980f4e9410777273eb6d1cae67788367a2a2d5cd4'
             'dda2e928f3b02c28e71d4e99f90b499b4c99a265d30fceec7dc1dd7082afc285'
             'b19a23d37f3c74aa928c5d577f4fb41f115dbe1acdc3f6383ac9a53c15dbcf71'
-            '06cad2a429f2a694f55300a5153483f9883ae5cfb8f8223ed2821a944e6ea4a4'
-            '43e0a20d037015742373f19def6f31710dd35a8ee0e121a97c29b2a57080b801'
+            '2d3d2630f70455665508f1fafe9ed4a320b7e35f6c33843934f5823d175d89f7'
+            '0db4eca1b2c5e75de40de2f58aefe337d236b7bb450c111ee4ca7fa460c7ee73'
+            'a7a7aa38aa21d4749994c0d12823638bf83070bcdd11fb470ecd5904c5c183bf'
+            '244678444eb5a297badcfedaac324d1186a8973aea0e8a98128b65eb9ecd644b'
             'c6f778d786fbdd3483c66d834321c788b2818828003862d5a2a12f4cbc1694e6'
             'c9420129ecdbdfaf3b2006923763d1291f9031f26911219910593b33b621e18d'
             'c5ade2a167b1337e5564e49f9bec135d40b30b2442174598c354d80580a0af4e'

@@ -1,7 +1,7 @@
-From 837a10d1d705f918e9886bac3e04a1672a4b795a Mon Sep 17 00:00:00 2001
+From 06ddbc0584f72b01d5288d34a4a9a1710c5b11ec Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Mon, 4 Jul 2022 11:38:10 +0200
-Subject: [PATCH 3/7] ACPI: EC: fix ECDT probe ordering issues
+Subject: [PATCH 4/4] ACPI: EC: fix ECDT probe ordering issues
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -43,11 +43,15 @@ BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=214899
 Reported-and-tested-by: Johannes Penßel <johannespenssel@posteo.net>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/acpi/ec.c | 33 +++++++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 10 deletions(-)
+Changes in v2:
+- Rebase on top of v2 ACPICA patches which add 2 new functions for this
+  instead of using a flags argument
+---
+ drivers/acpi/ec.c | 28 ++++++++++++++++++----------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
-index a1b871a418f8..d2ebe14135bd 100644
+index 55c503225396..538e521085c3 100644
 --- a/drivers/acpi/ec.c
 +++ b/drivers/acpi/ec.c
 @@ -94,6 +94,7 @@ enum {
@@ -58,7 +62,7 @@ index a1b871a418f8..d2ebe14135bd 100644
  	EC_FLAGS_QUERY_METHODS_INSTALLED, /* _Qxx handlers installed */
  	EC_FLAGS_STARTED,		/* Driver is started */
  	EC_FLAGS_STOPPED,		/* Driver is stopped */
-@@ -1459,6 +1460,7 @@ static bool install_gpio_irq_event_handler(struct acpi_ec *ec)
+@@ -1450,6 +1451,7 @@ static bool install_gpio_irq_event_handler(struct acpi_ec *ec)
   * ec_install_handlers - Install service callbacks and register query methods.
   * @ec: Target EC.
   * @device: ACPI device object corresponding to @ec.
@@ -66,7 +70,7 @@ index a1b871a418f8..d2ebe14135bd 100644
   *
   * Install a handler for the EC address space type unless it has been installed
   * already.  If @device is not NULL, also look for EC query methods in the
-@@ -1471,7 +1473,8 @@ static bool install_gpio_irq_event_handler(struct acpi_ec *ec)
+@@ -1462,7 +1464,8 @@ static bool install_gpio_irq_event_handler(struct acpi_ec *ec)
   * -EPROBE_DEFER if GPIO IRQ acquisition needs to be deferred,
   * or 0 (success) otherwise.
   */
@@ -76,7 +80,7 @@ index a1b871a418f8..d2ebe14135bd 100644
  {
  	acpi_status status;
  
-@@ -1479,10 +1482,11 @@ static int ec_install_handlers(struct acpi_ec *ec, struct acpi_device *device)
+@@ -1470,10 +1473,10 @@ static int ec_install_handlers(struct acpi_ec *ec, struct acpi_device *device)
  
  	if (!test_bit(EC_FLAGS_EC_HANDLER_INSTALLED, &ec->flags)) {
  		acpi_ec_enter_noirq(ec);
@@ -84,31 +88,26 @@ index a1b871a418f8..d2ebe14135bd 100644
 -							    ACPI_ADR_SPACE_EC,
 -							    &acpi_ec_space_handler,
 -							    NULL, ec);
-+		status = acpi_install_address_space_handler_flags(ec->handle,
-+								  ACPI_ADR_SPACE_EC,
-+								  &acpi_ec_space_handler,
-+								  NULL, ec,
-+								  ACPI_NO_EXEC__REG);
++		status = acpi_install_address_space_handler_no_reg(ec->handle,
++								   ACPI_ADR_SPACE_EC,
++								   &acpi_ec_space_handler,
++								   NULL, ec);
  		if (ACPI_FAILURE(status)) {
  			acpi_ec_stop(ec, false);
  			return -ENODEV;
-@@ -1490,6 +1494,15 @@ static int ec_install_handlers(struct acpi_ec *ec, struct acpi_device *device)
- 		set_bit(EC_FLAGS_EC_HANDLER_INSTALLED, &ec->flags);
+@@ -1482,6 +1485,11 @@ static int ec_install_handlers(struct acpi_ec *ec, struct acpi_device *device)
+ 		ec->address_space_handler_holder = ec->handle;
  	}
  
 +	if (call_reg && !test_bit(EC_FLAGS_EC_REG_CALLED, &ec->flags)) {
-+		acpi_install_address_space_handler_flags(ec->handle,
-+							 ACPI_ADR_SPACE_EC,
-+							 &acpi_ec_space_handler,
-+							 NULL, ec,
-+							 ACPI_NO_INSTALL_SPACE_HANDLER);
++		acpi_execute_reg_methods(ec->handle, ACPI_ADR_SPACE_EC);
 +		set_bit(EC_FLAGS_EC_REG_CALLED, &ec->flags);
 +	}
 +
  	if (!device)
  		return 0;
  
-@@ -1575,11 +1588,11 @@ static void ec_remove_handlers(struct acpi_ec *ec)
+@@ -1568,11 +1576,11 @@ static void ec_remove_handlers(struct acpi_ec *ec)
  	}
  }
  
@@ -122,7 +121,7 @@ index a1b871a418f8..d2ebe14135bd 100644
  	if (ret)
  		return ret;
  
-@@ -1641,7 +1654,7 @@ static int acpi_ec_add(struct acpi_device *device)
+@@ -1637,7 +1645,7 @@ static int acpi_ec_add(struct acpi_device *device)
  		}
  	}
  
@@ -131,7 +130,7 @@ index a1b871a418f8..d2ebe14135bd 100644
  	if (ret)
  		goto err;
  
-@@ -1761,7 +1774,7 @@ void __init acpi_ec_dsdt_probe(void)
+@@ -1757,7 +1765,7 @@ void __init acpi_ec_dsdt_probe(void)
  	 * At this point, the GPE is not fully initialized, so do not to
  	 * handle the events.
  	 */
@@ -140,7 +139,7 @@ index a1b871a418f8..d2ebe14135bd 100644
  	if (ret) {
  		acpi_ec_free(ec);
  		return;
-@@ -1973,7 +1986,7 @@ void __init acpi_ec_ecdt_probe(void)
+@@ -1941,7 +1949,7 @@ void __init acpi_ec_ecdt_probe(void)
  	 * At this point, the namespace is not initialized, so do not find
  	 * the namespace objects, or handle the events.
  	 */
@@ -150,5 +149,5 @@ index a1b871a418f8..d2ebe14135bd 100644
  		acpi_ec_free(ec);
  		goto out;
 -- 
-2.37.1
+2.37.3
 
