@@ -71,8 +71,8 @@ fi
 ### IMPORTANT: Do no edit below this line unless you know what you're doing
 
 pkgbase=linux-xanmod
-_major=6.0
-pkgver=${_major}.10
+_major=6.1
+pkgver=${_major}.0
 _branch=6.x
 xanmod=1
 pkgrel=${xanmod}
@@ -93,7 +93,6 @@ _srcname="linux-${pkgver}-xanmod${xanmod}"
 source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
         "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
          choose-gcc-optimization.sh
-        '0001-PCI-DPC-Quirk-poot-port-PIO-log-size-for-certain-Int.patch'
         '0002-ACPICA-include-acpi-acpixf.h-Fix-indentation.patch'
         '0003-ACPICA-Allow-address_space_handler-Install-and-_REG-.patch'
         '0004-ACPI-EC-Fix-EC-address-space-handler-unregistration.patch'
@@ -117,11 +116,10 @@ for _patch in ${_patches[@]}; do
     source+=("${_patch}::https://raw.githubusercontent.com/archlinux/svntogit-packages/${_commit}/trunk/${_patch}")
 done
 
-sha256sums=('5c2443a5538de52688efb55c27ab0539c1f5eb58c0cfd16a2b9fbb08fd81788e'
+sha256sums=('2ca1f17051a430f6fed1196e4952717507171acfd97d96577212502703b25deb'
             'SKIP'
-            '67c4196be63d80211bfe59d33bc3272400a4baabfba4fb879214ae74e9c9fb7a'
-            'dda2e928f3b02c28e71d4e99f90b499b4c99a265d30fceec7dc1dd7082afc285'
-            'b19a23d37f3c74aa928c5d577f4fb41f115dbe1acdc3f6383ac9a53c15dbcf71'
+            'b044b25b37117f3de7878e6f9e94bd6e215ff8ec949ced8898000d9b52d1d55a'
+            '5c84bfe7c1971354cff3f6b3f52bf33e7bbeec22f85d5e7bfde383b54c679d30'
             '2d3d2630f70455665508f1fafe9ed4a320b7e35f6c33843934f5823d175d89f7'
             '0db4eca1b2c5e75de40de2f58aefe337d236b7bb450c111ee4ca7fa460c7ee73'
             'a7a7aa38aa21d4749994c0d12823638bf83070bcdd11fb470ecd5904c5c183bf'
