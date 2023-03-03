@@ -71,8 +71,8 @@ fi
 ### IMPORTANT: Do no edit below this line unless you know what you're doing
 
 pkgbase=linux-xanmod
-_major=6.1
-pkgver=${_major}.0
+_major=6.2
+pkgver=${_major}.1
 _branch=6.x
 xanmod=1
 pkgrel=${xanmod}
@@ -92,11 +92,7 @@ _srcname="linux-${pkgver}-xanmod${xanmod}"
 
 source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
         "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
-         choose-gcc-optimization.sh
-        '0002-ACPICA-include-acpi-acpixf.h-Fix-indentation.patch'
-        '0003-ACPICA-Allow-address_space_handler-Install-and-_REG-.patch'
-        '0004-ACPI-EC-Fix-EC-address-space-handler-unregistration.patch'
-        '0005-ACPI-EC-fix-ECDT-probe-ordering-issues.patch'
+         'choose-gcc-optimization.sh'        
         '0006-Add-IdeaPad-WMI-Fn-Keys-driver.patch'
         '0007-Add-IdeaPad-Usage-Mode-driver.patch'
         '0008-Add-IdeaPad-quick_charge-attribute-to-sysfs.patch'        
@@ -116,14 +112,10 @@ for _patch in ${_patches[@]}; do
     source+=("${_patch}::https://raw.githubusercontent.com/archlinux/svntogit-packages/${_commit}/trunk/${_patch}")
 done
 
-sha256sums=('2ca1f17051a430f6fed1196e4952717507171acfd97d96577212502703b25deb'
+sha256sums=('74862fa8ab40edae85bb3385c0b71fe103288bce518526d63197800b3cbdecb1'
             'SKIP'
-            'b044b25b37117f3de7878e6f9e94bd6e215ff8ec949ced8898000d9b52d1d55a'
+            '8fd0f1e69f53e779fcbaddfa616bf5b7d651a3cec80c952217718bca474481d2'
             '5c84bfe7c1971354cff3f6b3f52bf33e7bbeec22f85d5e7bfde383b54c679d30'
-            '2d3d2630f70455665508f1fafe9ed4a320b7e35f6c33843934f5823d175d89f7'
-            '0db4eca1b2c5e75de40de2f58aefe337d236b7bb450c111ee4ca7fa460c7ee73'
-            'a7a7aa38aa21d4749994c0d12823638bf83070bcdd11fb470ecd5904c5c183bf'
-            '244678444eb5a297badcfedaac324d1186a8973aea0e8a98128b65eb9ecd644b'
             'c6f778d786fbdd3483c66d834321c788b2818828003862d5a2a12f4cbc1694e6'
             'c9420129ecdbdfaf3b2006923763d1291f9031f26911219910593b33b621e18d'
             'c5ade2a167b1337e5564e49f9bec135d40b30b2442174598c354d80580a0af4e'
