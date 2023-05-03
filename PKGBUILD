@@ -23,10 +23,11 @@ if [ -z ${use_numa+x} ]; then
   use_numa=n
 fi
 
-## For performance you can disable FUNCTION_TRACER/GRAPH_TRACER. Limits debugging and analyzing of the kernel.
-## Stock Archlinux and Xanmod have this enabled. 
-## Set variable "use_tracers" to: n to disable (possibly increase performance)
-##                                y to enable  (stock default)
+## Since upstream disabled CONFIG_STACK_TRACER (limits debugging and analyzing of the kernel)
+## you can enable them setting this option. Caution, because they have an impact in performance.
+## Stock Archlinux has this enabled. 
+## Set variable "use_tracers" to: n to disable (possibly increase performance, XanMod default)
+##                                y to enable  (Archlinux default)
 if [ -z ${use_tracers+x} ]; then
   use_tracers=y
 fi
@@ -71,7 +72,7 @@ fi
 ### IMPORTANT: Do no edit below this line unless you know what you're doing
 
 pkgbase=linux-xanmod
-_major=6.2
+_major=6.3
 pkgver=${_major}.1
 _branch=6.x
 xanmod=1
@@ -96,9 +97,7 @@ source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar
         '0006-Add-IdeaPad-WMI-Fn-Keys-driver.patch'
         '0007-Add-IdeaPad-Usage-Mode-driver.patch'
         '0008-Add-IdeaPad-quick_charge-attribute-to-sysfs.patch'        
-        '0009-ALSA-hda-realtek-Add-quirk-for-Yoga-devices.patch'
-        '0010-HID-hid-sensor-custom-More-custom-iio-sensors.patch'
-        '0011-IIO-hid-sensor-als-Use-generic-usage.patch')     
+        '0009-ALSA-hda-realtek-Add-quirk-for-Yoga-devices.patch')     
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
@@ -112,16 +111,14 @@ for _patch in ${_patches[@]}; do
     source+=("${_patch}::https://raw.githubusercontent.com/archlinux/svntogit-packages/${_commit}/trunk/${_patch}")
 done
 
-sha256sums=('74862fa8ab40edae85bb3385c0b71fe103288bce518526d63197800b3cbdecb1'
+sha256sums=('ba3491f5ed6bd270a370c440434e3d69085fcdd528922fa01e73d7657db73b1e'
             'SKIP'
-            '8fd0f1e69f53e779fcbaddfa616bf5b7d651a3cec80c952217718bca474481d2'
+            '42b4529d90c9733be72edf3fd6b32452acd2ed41c4c4759276a7027c38661b7d'
             '5c84bfe7c1971354cff3f6b3f52bf33e7bbeec22f85d5e7bfde383b54c679d30'
             'c6f778d786fbdd3483c66d834321c788b2818828003862d5a2a12f4cbc1694e6'
             'c9420129ecdbdfaf3b2006923763d1291f9031f26911219910593b33b621e18d'
             'c5ade2a167b1337e5564e49f9bec135d40b30b2442174598c354d80580a0af4e'
-            '4ccf87491541cd991fbb2cf05f87fd08ddb885144f7c3bc04fe16e406327b136'
-            'd1b2c9c17b0c193d3df1184d0f7fc850daf9e3d84d1d34385c8a9ee10a6ae17c'
-            '7ff6d9c2da686f3331c117d2f06f6aa9f37be5ac95eb781b54491e0ece517a8a')
+            '4ccf87491541cd991fbb2cf05f87fd08ddb885144f7c3bc04fe16e406327b136')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
@@ -134,7 +131,6 @@ prepare() {
   patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}
 
   msg2 "Setting version..."
-  scripts/setlocalversion --save-scmversion
   echo "-$pkgrel" > localversion.10-pkgrel
   echo "${pkgbase#linux-xanmod}" > localversion.20-pkgname
 
@@ -164,11 +160,12 @@ prepare() {
                  --enable CONFIG_IKCONFIG_PROC
 
   # User set. See at the top of this file
-  if [ "$use_tracers" = "n" ]; then
-    msg2 "Disabling FUNCTION_TRACER/GRAPH_TRACER only if we are not compiling with clang..."
+  if [ "$use_tracers" = "y" ]; then
+    msg2 "Enabling CONFIG_FTRACE only if we are not compiling with clang..."
     if [ "${_compiler}" = "gcc" ]; then
-      scripts/config --disable CONFIG_FUNCTION_TRACER \
-                     --disable CONFIG_STACK_TRACER
+      scripts/config --enable CONFIG_FTRACE \
+                     --enable CONFIG_FUNCTION_TRACER \
+                     --enable CONFIG_STACK_TRACER
     fi
   fi
 
@@ -285,7 +282,7 @@ _package-headers() {
   install -Dt "$builddir/tools/objtool" tools/objtool/objtool
 
   # required when DEBUG_INFO_BTF_MODULES is enabled
-  if [ -f "$builddir/tools/bpf/resolve_btfids" ]; then install -Dt "$builddir/tools/bpf/resolve_btfids" tools/bpf/resolve_btfids/resolve_btfids ; fi
+  if [ -f "tools/bpf/resolve_btfids/resolve_btfids" ]; then install -Dt "$builddir/tools/bpf/resolve_btfids" tools/bpf/resolve_btfids/resolve_btfids ; fi
 
   msg2 "Installing headers..."
   cp -t "$builddir" -a include
